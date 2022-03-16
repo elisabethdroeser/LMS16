@@ -15,6 +15,5 @@ namespace LMS16.Core.Entities
 
         public Course Course { get; set; }
         public int CourseId { get; set; }
-
     }
 }
