@@ -28,6 +28,21 @@ builder.Services.AddControllersWithViews();//lägga till filters här;
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var db = services.GetService<ApplicationDbContext>();
+
+    try
+    {
+
+    }
+    catch (Exception ex)
+    {
+        throw;
+    }
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

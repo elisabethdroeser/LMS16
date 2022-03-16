@@ -8,16 +8,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LMS16.Core.Entities;
 using LMS16.Data.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace LMS16.Controllers
 {
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext db;
+        private readonly UserManager<User> userManager;
 
-        public CoursesController(ApplicationDbContext context)
+        public CoursesController(ApplicationDbContext context, UserManager<User> userManager)
         {
             db = context;
+            this.userManager = userManager;
         }
 
         // GET: Courses
