@@ -24,7 +24,7 @@ builder.Services.AddDefaultIdentity<User>(options =>
     .AddRoles<IdentityRole>() //använda oss av olika typer av roller. ms default information.
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews();//lägga till filters här;
 
 var app = builder.Build();
 
