@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS16.Core.Entities
 #nullable disable
 {
-    public class User
+    public class User : IdentityUser
     {
         public int Id { get; set; }
 

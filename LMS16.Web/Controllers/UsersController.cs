@@ -13,17 +13,17 @@ namespace LMS16.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext db;
 
         public UsersController(ApplicationDbContext context)
         {
-            _context = context;
+            db = context;
         }
 
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.User.Include(u => u.Course);
+            var applicationDbContext = db.User.Include(u => u.Course);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
+            var user = await db.User
                 .Include(u => u.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
@@ -49,7 +49,7 @@ namespace LMS16.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id");
+            ViewData["CourseId"] = new SelectList(db.Course, "Id", "Id");
             return View();
         }
 
@@ -62,11 +62,11 @@ namespace LMS16.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
+                db.Add(user);
+                await db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", user.CourseId);
+            ViewData["CourseId"] = new SelectList(db.Course, "Id", "Id", user.CourseId);
             return View(user);
         }
 
@@ -78,12 +78,12 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User.FindAsync(id);
+            var user = await db.User.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", user.CourseId);
+            ViewData["CourseId"] = new SelectList(db.Course, "Id", "Id", user.CourseId);
             return View(user);
         }
 
@@ -103,8 +103,8 @@ namespace LMS16.Controllers
             {
                 try
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    db.Update(user);
+                    await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -119,7 +119,7 @@ namespace LMS16.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", user.CourseId);
+            ViewData["CourseId"] = new SelectList(db.Course, "Id", "Id", user.CourseId);
             return View(user);
         }
 
@@ -131,7 +131,7 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
+            var user = await db.User
                 .Include(u => u.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
@@ -147,15 +147,15 @@ namespace LMS16.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.User.FindAsync(id);
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
+            var user = await db.User.FindAsync(id);
+            db.User.Remove(user);
+            await db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(int id)
         {
-            return _context.User.Any(e => e.Id == id);
+            return db.User.Any(e => e.Id == id);
         }
     }
 }

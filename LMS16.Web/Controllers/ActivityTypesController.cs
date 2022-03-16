@@ -11,22 +11,22 @@ using LMS16.Data;
 
 namespace LMS16.Controllers
 {
-    public class CoursesController : Controller
+    public class ActivityTypesController : Controller
     {
         private readonly ApplicationDbContext db;
 
-        public CoursesController(ApplicationDbContext context)
+        public ActivityTypesController(ApplicationDbContext context)
         {
             db = context;
         }
 
-        // GET: Courses
+        // GET: ActivityTypes
         public async Task<IActionResult> Index()
         {
-            return View(await db.Course.ToListAsync());
+            return View(await db.ActivityType.ToListAsync());
         }
 
-        // GET: Courses/Details/5
+        // GET: ActivityTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,39 +34,39 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var course = await db.Course
+            var activityType = await db.ActivityType
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (course == null)
+            if (activityType == null)
             {
                 return NotFound();
             }
 
-            return View(course);
+            return View(activityType);
         }
 
-        // GET: Courses/Create
+        // GET: ActivityTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Courses/Create
+        // POST: ActivityTypes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,StartDate")] Course course)
+        public async Task<IActionResult> Create([Bind("Id,Name")] ActivityType activityType)
         {
             if (ModelState.IsValid)
             {
-                db.Add(course);
+                db.Add(activityType);
                 await db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(course);
+            return View(activityType);
         }
 
-        // GET: Courses/Edit/5
+        // GET: ActivityTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,22 +74,22 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var course = await db.Course.FindAsync(id);
-            if (course == null)
+            var activityType = await db.ActivityType.FindAsync(id);
+            if (activityType == null)
             {
                 return NotFound();
             }
-            return View(course);
+            return View(activityType);
         }
 
-        // POST: Courses/Edit/5
+        // POST: ActivityTypes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,StartDate")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] ActivityType activityType)
         {
-            if (id != course.Id)
+            if (id != activityType.Id)
             {
                 return NotFound();
             }
@@ -98,12 +98,12 @@ namespace LMS16.Controllers
             {
                 try
                 {
-                    db.Update(course);
+                    db.Update(activityType);
                     await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CourseExists(course.Id))
+                    if (!ActivityTypeExists(activityType.Id))
                     {
                         return NotFound();
                     }
@@ -114,10 +114,10 @@ namespace LMS16.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(course);
+            return View(activityType);
         }
 
-        // GET: Courses/Delete/5
+        // GET: ActivityTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,30 +125,30 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var course = await db.Course
+            var activityType = await db.ActivityType
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (course == null)
+            if (activityType == null)
             {
                 return NotFound();
             }
 
-            return View(course);
+            return View(activityType);
         }
 
-        // POST: Courses/Delete/5
+        // POST: ActivityTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await db.Course.FindAsync(id);
-            db.Course.Remove(course);
+            var activityType = await db.ActivityType.FindAsync(id);
+            db.ActivityType.Remove(activityType);
             await db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CourseExists(int id)
+        private bool ActivityTypeExists(int id)
         {
-            return db.Course.Any(e => e.Id == id);
+            return db.ActivityType.Any(e => e.Id == id);
         }
     }
 }

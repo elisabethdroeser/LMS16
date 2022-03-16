@@ -13,19 +13,19 @@ namespace LMS16.Controllers
 {
     public class ModulesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext db;
 
         public ModulesController(ApplicationDbContext context)
         {
-            _context = context;
+            db = context;
         }
 
         // GET: Modules
-        //public async Task<IActionResult> Index()
-        //{
-            //var applicationDbContext = _context.Module.Include(@ => @.Course);
-            //return View(await _context.ToListAsync());
-        //}
+        public async Task<IActionResult> Index()
+        {
+            var applicationDbContext = db.Module.Include(m => m.Course);
+            return View(await applicationDbContext.ToListAsync());
+        }
 
         // GET: Modules/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -35,7 +35,7 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var @module = await _context.Module
+            var @module = await db.Module
                // .Include(@ => @.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@module == null)
@@ -49,7 +49,7 @@ namespace LMS16.Controllers
         // GET: Modules/Create
         public IActionResult Create()
         {
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id");
+            ViewData["CourseId"] = new SelectList(db.Course, "Id", "Id");
             return View();
         }
 
@@ -62,11 +62,11 @@ namespace LMS16.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@module);
-                await _context.SaveChangesAsync();
+                db.Add(@module);
+                await db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", @module.CourseId);
+            ViewData["CourseId"] = new SelectList(db.Course, "Id", "Id", @module.CourseId);
             return View(@module);
         }
 
@@ -78,12 +78,12 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var @module = await _context.Module.FindAsync(id);
+            var @module = await db.Module.FindAsync(id);
             if (@module == null)
             {
                 return NotFound();
             }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", @module.CourseId);
+            ViewData["CourseId"] = new SelectList(db.Course, "Id", "Id", @module.CourseId);
             return View(@module);
         }
 
@@ -103,8 +103,8 @@ namespace LMS16.Controllers
             {
                 try
                 {
-                    _context.Update(@module);
-                    await _context.SaveChangesAsync();
+                    db.Update(@module);
+                    await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -119,7 +119,7 @@ namespace LMS16.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Id", @module.CourseId);
+            ViewData["CourseId"] = new SelectList(db.Course, "Id", "Id", @module.CourseId);
             return View(@module);
         }
 
@@ -131,7 +131,7 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var @module = await _context.Module
+            var @module = await db.Module
              //   .Include(@ => @.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@module == null)
@@ -147,15 +147,15 @@ namespace LMS16.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @module = await _context.Module.FindAsync(id);
-            _context.Module.Remove(@module);
-            await _context.SaveChangesAsync();
+            var @module = await db.Module.FindAsync(id);
+            db.Module.Remove(@module);
+            await db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ModuleExists(int id)
         {
-            return _context.Module.Any(e => e.Id == id);
+            return db.Module.Any(e => e.Id == id);
         }
     }
 }

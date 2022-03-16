@@ -13,17 +13,18 @@ namespace LMS16.Controllers
 {
     public class ActivitiesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext db;
 
         public ActivitiesController(ApplicationDbContext context)
         {
-            _context = context;
+            db = context;
         }
 
         // GET: Activities
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Activity.Include(a => a.ActivityType).Include(a => a.Module);
+            var applicationDbContext = db.Activity.Include(a => a.ActivityType)
+                                                    .Include(a => a.Module);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +36,7 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var activity = await _context.Activity
+            var activity = await db.Activity
                 .Include(a => a.ActivityType)
                 .Include(a => a.Module)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -50,8 +51,8 @@ namespace LMS16.Controllers
         // GET: Activities/Create
         public IActionResult Create()
         {
-            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityType, "Id", "Id");
-            ViewData["ModuleId"] = new SelectList(_context.Module, "Id", "Id");
+            ViewData["ActivityTypeId"] = new SelectList(db.ActivityType, "Id", "Id");
+            ViewData["ModuleId"] = new SelectList(db.Module, "Id", "Id");
             return View();
         }
 
@@ -64,12 +65,12 @@ namespace LMS16.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(activity);
-                await _context.SaveChangesAsync();
+                db.Add(activity);
+                await db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityType, "Id", "Id", activity.ActivityTypeId);
-            ViewData["ModuleId"] = new SelectList(_context.Module, "Id", "Id", activity.ModuleId);
+            ViewData["ActivityTypeId"] = new SelectList(db.ActivityType, "Id", "Id", activity.ActivityTypeId);
+            ViewData["ModuleId"] = new SelectList(db.Module, "Id", "Id", activity.ModuleId);
             return View(activity);
         }
 
@@ -81,13 +82,13 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var activity = await _context.Activity.FindAsync(id);
+            var activity = await db.Activity.FindAsync(id);
             if (activity == null)
             {
                 return NotFound();
             }
-            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityType, "Id", "Id", activity.ActivityTypeId);
-            ViewData["ModuleId"] = new SelectList(_context.Module, "Id", "Id", activity.ModuleId);
+            ViewData["ActivityTypeId"] = new SelectList(db.ActivityType, "Id", "Id", activity.ActivityTypeId);
+            ViewData["ModuleId"] = new SelectList(db.Module, "Id", "Id", activity.ModuleId);
             return View(activity);
         }
 
@@ -107,8 +108,8 @@ namespace LMS16.Controllers
             {
                 try
                 {
-                    _context.Update(activity);
-                    await _context.SaveChangesAsync();
+                    db.Update(activity);
+                    await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,8 +124,8 @@ namespace LMS16.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ActivityTypeId"] = new SelectList(_context.ActivityType, "Id", "Id", activity.ActivityTypeId);
-            ViewData["ModuleId"] = new SelectList(_context.Module, "Id", "Id", activity.ModuleId);
+            ViewData["ActivityTypeId"] = new SelectList(db.ActivityType, "Id", "Id", activity.ActivityTypeId);
+            ViewData["ModuleId"] = new SelectList(db.Module, "Id", "Id", activity.ModuleId);
             return View(activity);
         }
 
@@ -136,7 +137,7 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var activity = await _context.Activity
+            var activity = await db.Activity
                 .Include(a => a.ActivityType)
                 .Include(a => a.Module)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -153,15 +154,15 @@ namespace LMS16.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var activity = await _context.Activity.FindAsync(id);
-            _context.Activity.Remove(activity);
-            await _context.SaveChangesAsync();
+            var activity = await db.Activity.FindAsync(id);
+            db.Activity.Remove(activity);
+            await db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ActivityExists(int id)
         {
-            return _context.Activity.Any(e => e.Id == id);
+            return db.Activity.Any(e => e.Id == id);
         }
     }
 }
