@@ -4,7 +4,7 @@ using LMS16.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 
 #nullable disable
-namespace LMS16.Data
+namespace LMS16.Data.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string>
     {
@@ -22,12 +22,6 @@ namespace LMS16.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Activity>().HasKey(a => new { a.ModuleId, a.ActivityTypeId });
-
-            modelBuilder.Entity<Module>().HasKey(m => new { m.CourseId });
-
-            modelBuilder.Entity<User>().HasKey(u => new { u.CourseId });
         }
     }
 }

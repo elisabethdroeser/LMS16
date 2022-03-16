@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LMS16.Core.Entities;
-using LMS16.Data;
+using LMS16.Data.Data;
 
 namespace LMS16.Controllers
 {

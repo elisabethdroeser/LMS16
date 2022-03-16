@@ -1,5 +1,6 @@
 using LMS16.Core.Entities;
 using LMS16.Data;
+using LMS16.Data.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
