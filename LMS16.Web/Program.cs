@@ -32,10 +32,16 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var db = services.GetService<ApplicationDbContext>();
+    var config = services.GetRequiredService<IConfiguration>();
+
+    //dotnet user-UserSecretsConfigurationExtensions set "AdminPW" "Lösenord!";
+
+
+    var teacherPW = config["TeacherPW"];
 
     try
     {
-
+        SeedData.InitAsync(db, services, teacherPW).GetAwaiter().GetResult(); 
     }
     catch (Exception ex)
     {

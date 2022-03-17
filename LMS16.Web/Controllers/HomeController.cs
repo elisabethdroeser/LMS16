@@ -1,5 +1,5 @@
 ﻿using LMS16.Core.Entities;
-using LMS16.Web.Models;
+using LMS16.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

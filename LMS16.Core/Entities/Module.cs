@@ -12,7 +12,7 @@
         public Course Course { get; set; }
         public int CourseId { get; set; }
 
-        public ICollection<Activity> Activities { get; set; }
+        public ICollection<Activity> Activities { get; set; } = new List<Activity>();
 
     }
 }

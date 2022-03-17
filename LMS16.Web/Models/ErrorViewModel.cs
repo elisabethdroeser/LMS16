@@ -1,4 +1,4 @@
-namespace LMS16.Web.Models
+namespace LMS16.Models
 {
     public class ErrorViewModel
     {

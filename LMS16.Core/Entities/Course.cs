@@ -7,7 +7,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
-        public ICollection<User> Users { get; set; }
-        public ICollection<Module> Modules { get; set; }
+        public ICollection<User> Users { get; set; } = new List<User>();
+        public ICollection<Module> Modules { get; set; } = new List<Module>();
     }
 }
