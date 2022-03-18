@@ -38,10 +38,11 @@ using (var scope = app.Services.CreateScope())
 
 
     var teacherPW = config["TeacherPW"];
+    var studentPW = config["studentPW"];
 
     try
     {
-        SeedData.InitAsync(db, services, teacherPW).GetAwaiter().GetResult(); 
+        SeedData.InitAsync(db, services, teacherPW, studentPW).GetAwaiter().GetResult(); 
     }
     catch (Exception ex)
     {

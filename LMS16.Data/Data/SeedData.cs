@@ -39,14 +39,13 @@ namespace LMS16.Data.Data
             if (userManager == null) throw new NullReferenceException(nameof(UserManager<User>));
     
             var roleNames = new[] { "Student", "Teacher" };
-            //var teacherMail = "teacher1@school.se";
-            //var studentMail = "student1@school.se";
+            var teacherMail = "teacher1@school.se";
+            var studentMail = "student1@school.se";
 
             var activityTypes = GetActivityTypes();
             await db.AddRangeAsync(activityTypes);
             await db.SaveChangesAsync();
 
-            //await AddRolesAsync(rolenNmes);
             //AspNetRoles
 
             var courses = GetCourses();
@@ -60,7 +59,6 @@ namespace LMS16.Data.Data
             var modules = GetModules(courses);
             await db.AddRangeAsync(modules);
             await db.SaveChangesAsync();
-            //await AddRolesAsync(roleNames);
 
             //AspNetUserClaims
             //AspNetUserLogins
@@ -71,16 +69,13 @@ namespace LMS16.Data.Data
             await db.AddRangeAsync(activities);
             await db.SaveChangesAsync();
 
-            //await AddRolesAsync(roleNames);
+            await AddRolesAsync(roleNames);
 
-            //var teacher = await AddTeacherAsync(teacherMail, teacherPW);
-            //await AddRolesAsync(teacher, roleNames);
+            var teacher = await AddTeacherAsync(teacherMail, teacherPW);
+            await AddRolesAsync(teacher, roleNames);
 
-            //var student = await AddStudentAsync(studentMail, studentPW);
-            //await AddRolesAsync(student, roleNames);
-
-            //var users = GetUsers();
-            //await db.AddRangeAsync(users);  
+            var student = await AddStudentAsync(studentMail, studentPW);
+            await AddRolesAsync(student, roleNames);
 
             await db.SaveChangesAsync();
         }
@@ -109,7 +104,7 @@ namespace LMS16.Data.Data
                         var activity = new Activity
                         {
                             Name = faker.Commerce.Product(),
-                            Description = faker.Commerce.ProductDescription.Department(),
+                            Description = faker.Commerce.Department(),
                             StartDate = faker.Date.Soon(1),
                             EndDate = faker.Date.Past(1),
                             ActivityType = activityType,
@@ -135,7 +130,7 @@ namespace LMS16.Data.Data
                         Name = faker.Commerce.ProductMaterial(),
                         Description = faker.Commerce.ProductDescription(),
                         StartDate = faker.Date.Soon(1),
-                        EndDate = faker.Date.Past(2)
+                        EndDate = faker.Date.Past(2),
                         Course = course
                     };
                     modules.Add(module);
@@ -146,7 +141,20 @@ namespace LMS16.Data.Data
 
         private static IEnumerable<Course> GetCourses()
         {
-            
+            var courses = new List<Course>();
+
+            for (int i = 0; i < 20; i++)
+            {
+                var course = new Course
+                {
+                    Name = faker.Commerce.ProductMaterial(),
+                    Description = faker.Commerce.ProductDescription(),
+                    StartDate = faker.Date.Soon(1),
+                };
+                courses.Add(course);
+            }
+
+            return courses;
         }
 
         private static List<ActivityType> GetActivityTypes()
@@ -160,6 +168,58 @@ namespace LMS16.Data.Data
                  new ActivityType(){ Name = "Other"}
             };
             return activityTypes;
+        }
+
+        private static async Task<User> AddTeacherAsync(string teacherEmail, string teacherPW)
+        {
+            var found = await userManager.FindByEmailAsync(teacherEmail);
+
+            if (found != null) return null!;
+
+            var teacher = new User
+            {
+                UserName = teacherEmail,
+                Email = teacherEmail,
+                FirstName = "Teacher",
+                
+            };
+
+            var result = await userManager.CreateAsync(teacher, teacherPW);
+            if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
+
+            return teacher;
+        }
+
+        private static async Task<User> AddStudentAsync(string studentEmail, string studentPW)
+        {
+            var found = await userManager.FindByEmailAsync(studentEmail);
+
+            if (found != null) return null!;
+
+            var student = new User
+            {
+                UserName = studentEmail,
+                Email = studentEmail,
+                FirstName = "Teacher",
+
+            };
+
+            var result = await userManager.CreateAsync(student, studentPW);
+            if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
+
+            return student;
+        }
+
+        private static async Task AddRolesAsync(string[] roleNames)
+        {
+            foreach (var roleName in roleNames)
+            {
+                if (await roleManager.RoleExistsAsync(roleName)) continue;
+                var role = new IdentityRole { Name = roleName };
+                var result = await roleManager.CreateAsync(role);
+
+                if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
+            }
         }
     }
 }
