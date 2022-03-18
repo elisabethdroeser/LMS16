@@ -15,5 +15,19 @@
         public ActivityType ActivityType { get; set; }
         public int ActivityTypeId { get; set; }
 
+        public Activity()
+        {
+
+        }
+
+
+        public Activity (string name, string description, DateTime startDate, DateTime endDate)
+        {
+            Name = name;
+            Description = description;
+            StartDate = startDate;
+            EndDate = endDate;   
+        }
+
     }
 }

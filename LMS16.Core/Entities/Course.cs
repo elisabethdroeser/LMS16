@@ -9,5 +9,16 @@
         public DateTime StartDate { get; set; }
         public ICollection<User> Users { get; set; } = new List<User>();
         public ICollection<Module> Modules { get; set; } = new List<Module>();
+
+        public Course()
+        {
+       
+        }
+        public Course(string name, string description, DateTime startdate)
+        {
+            Name = name;
+            Description = description;
+            StartDate = startdate;  
+        }
     }
 }

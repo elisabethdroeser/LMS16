@@ -14,5 +14,17 @@
 
         public ICollection<Activity> Activities { get; set; } = new List<Activity>();
 
+        public Module()
+        {
+         
+        }
+
+        public Module(string name, string description, DateTime startdate, DateTime enddate)
+        {
+            Name = name;
+            Description = description;
+            StartDate = startdate;
+            EndDate = enddate;
+        }
     }
 }
