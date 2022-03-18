@@ -109,11 +109,11 @@ namespace LMS16.Data.Data
                         var activity = new Activity
                         {
                             Name = faker.Commerce.Product(),
-                            Description = faker.Commerce.Department(),
+                            Description = faker.Commerce.ProductDescription.Department(),
                             StartDate = faker.Date.Soon(1),
                             EndDate = faker.Date.Past(1),
                             ActivityType = activityType,
-                            Module = module,
+                            Module = module
                         };
                        activities.Add(activity);
                     }               
@@ -122,13 +122,26 @@ namespace LMS16.Data.Data
             return activities;
         }
 
-        private static IEnumerable<Module> GetModules(IEnumerable<Course> courses)
+        private static IEnumerable<LMS16.Core.Entities.Module> GetModules(IEnumerable<Course> courses)
         {
-            //var modules = new List<Module>();
-            /*foreach (int i = 0; i < 20; i++)
-            {
+            var modules = new List<LMS16.Core.Entities.Module>();
 
-            }*/
+            foreach (var course in courses)
+            {
+                if (faker.Random.Int(0,5) == 0)
+                {
+                    var module = new LMS16.Core.Entities.Module
+                    {
+                        Name = faker.Commerce.ProductMaterial(),
+                        Description = faker.Commerce.ProductDescription(),
+                        StartDate = faker.Date.Soon(1),
+                        EndDate = faker.Date.Past(2)
+                        Course = course
+                    };
+                    modules.Add(module);
+                } 
+            }
+            return modules;
         }
 
         private static IEnumerable<Course> GetCourses()
