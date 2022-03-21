@@ -18,15 +18,16 @@ namespace LMS16.Data.Data
         private static ApplicationDbContext db = default!;
         private static RoleManager<IdentityRole> roleManager = default!;
         private static UserManager<User> userManager = default!;
+        private static IEnumerable<Course> courses;
 
-        public static async Task InitAsync(ApplicationDbContext context, IServiceProvider services, string teacherPW, string studentPW)
+        public static async Task InitAsync(ApplicationDbContext context, IServiceProvider services, string teacherPW)
         {
             faker = new Faker();
 
             if (string.IsNullOrWhiteSpace(teacherPW)) throw new Exception("Can´t get password from config");
-            if (string.IsNullOrWhiteSpace(studentPW)) throw new Exception("Can´t get password from config");
+            //if (string.IsNullOrWhiteSpace(studentPW)) throw new Exception("Can´t get password from config");
 
-            if (db == null) throw new Exception(nameof(ApplicationDbContext));
+            if (context is null) throw new Exception(nameof(ApplicationDbContext));
             
             db = context;
 
@@ -39,18 +40,18 @@ namespace LMS16.Data.Data
             if (userManager == null) throw new NullReferenceException(nameof(UserManager<User>));
     
             var roleNames = new[] { "Student", "Teacher" };
-            var teacherMail = "teacher1@school.se";
-            var studentMail = "student1@school.se";
+            var teacherEmail = "teacher@school.se";
+            //var studentMail = "student1@school.se";
 
             var activityTypes = GetActivityTypes();
             await db.AddRangeAsync(activityTypes);
-            await db.SaveChangesAsync();
+            //await db.SaveChangesAsync();
 
             //AspNetRoles
 
-            var courses = GetCourses();
+            courses = GetCourses();
             await db.AddRangeAsync(courses);
-            await db.SaveChangesAsync();
+            //await db.SaveChangesAsync();
 
             //await AddRolesAsync(roleNames);
             //AspNetRoleClaims
@@ -58,7 +59,7 @@ namespace LMS16.Data.Data
 
             var modules = GetModules(courses);
             await db.AddRangeAsync(modules);
-            await db.SaveChangesAsync();
+            //await db.SaveChangesAsync();
 
             //AspNetUserClaims
             //AspNetUserLogins
@@ -67,16 +68,16 @@ namespace LMS16.Data.Data
 
             var activities = GetActivity(activityTypes, modules);
             await db.AddRangeAsync(activities);
-            await db.SaveChangesAsync();
+            //await db.SaveChangesAsync();
 
             await AddRolesAsync(roleNames);
 
-            var teacher = await AddTeacherAsync(teacherMail, teacherPW);
+            var teacher = await AddTeacherAsync(teacherEmail, teacherPW);
             await AddRolesAsync(teacher, roleNames);
 
-            var student = await AddStudentAsync(studentMail, studentPW);
+            /*var student = await AddStudentAsync(studentMail, studentPW);
             await AddRolesAsync(student, roleNames);
-
+            */
             await db.SaveChangesAsync();
         }
 
@@ -105,8 +106,8 @@ namespace LMS16.Data.Data
                         {
                             Name = faker.Commerce.Product(),
                             Description = faker.Commerce.Department(),
-                            StartDate = faker.Date.Soon(1),
-                            EndDate = faker.Date.Past(1),
+                            StartDate = DateTime.Now.AddDays(faker.Random.Int(-10, 10)),
+                            EndDate = faker.Date.Soon(3),
                             ActivityType = activityType,
                             Module = module
                         };
@@ -129,8 +130,8 @@ namespace LMS16.Data.Data
                     {
                         Name = faker.Commerce.ProductMaterial(),
                         Description = faker.Commerce.ProductDescription(),
-                        StartDate = faker.Date.Soon(1),
-                        EndDate = faker.Date.Past(2),
+                        StartDate = DateTime.Now.AddDays(faker.Random.Int(-10, 10)),
+                        EndDate = faker.Date.Soon(3),
                         Course = course
                     };
                     modules.Add(module);
@@ -181,6 +182,7 @@ namespace LMS16.Data.Data
                 UserName = teacherEmail,
                 Email = teacherEmail,
                 FirstName = "Teacher",
+                Course = courses.First()
                 
             };
 
@@ -189,7 +191,7 @@ namespace LMS16.Data.Data
 
             return teacher;
         }
-
+        /*
         private static async Task<User> AddStudentAsync(string studentEmail, string studentPW)
         {
             var found = await userManager.FindByEmailAsync(studentEmail);
@@ -209,6 +211,7 @@ namespace LMS16.Data.Data
 
             return student;
         }
+        */
 
         private static async Task AddRolesAsync(string[] roleNames)
         {

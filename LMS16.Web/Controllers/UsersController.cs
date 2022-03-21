@@ -23,7 +23,7 @@ namespace LMS16.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = db.User.Include(u => u.Course);
+            var applicationDbContext = db.Users.Include(u => u.Course);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var user = await db.User
+            var user = await db.Users
                 .Include(u => u.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
@@ -78,7 +78,7 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var user = await db.User.FindAsync(id);
+            var user = await db.Users.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -131,7 +131,7 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var user = await db.User
+            var user = await db.Users
                 .Include(u => u.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
@@ -147,15 +147,15 @@ namespace LMS16.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await db.User.FindAsync(id);
-            db.User.Remove(user);
+            var user = await db.Users.FindAsync(id);
+            db.Users.Remove(user);
             await db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(int id)
         {
-            return db.User.Any(e => e.Id == id);
+            return db.Users.Any(e => e.Id == id);
         }
     }
 }

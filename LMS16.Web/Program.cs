@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
@@ -31,18 +32,18 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var db = services.GetService<ApplicationDbContext>();
+    var db = services.GetRequiredService<ApplicationDbContext>();
     var config = services.GetRequiredService<IConfiguration>();
 
     //dotnet user-UserSecretsConfigurationExtensions set "AdminPW" "Lösenord!";
 
 
     var teacherPW = config["TeacherPW"];
-    var studentPW = config["studentPW"];
+    //var studentPW = config["studentPW"];
 
     try
     {
-        SeedData.InitAsync(db, services, teacherPW, studentPW).GetAwaiter().GetResult(); 
+        SeedData.InitAsync(db, services, teacherPW).GetAwaiter().GetResult();
     }
     catch (Exception ex)
     {

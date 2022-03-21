@@ -13,7 +13,6 @@ namespace LMS16.Data.Data
         {
         }
 
-        public DbSet<LMS16.Core.Entities.User> User { get; set; }
         public DbSet<LMS16.Core.Entities.Activity> Activity { get; set; }
         public DbSet<LMS16.Core.Entities.ActivityType> ActivityType { get; set; }
         public DbSet<LMS16.Core.Entities.Course> Course { get; set; }
