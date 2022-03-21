@@ -45,30 +45,15 @@ namespace LMS16.Data.Data
 
             var activityTypes = GetActivityTypes();
             await db.AddRangeAsync(activityTypes);
-            //await db.SaveChangesAsync();
-
-            //AspNetRoles
-
+     
             courses = GetCourses();
             await db.AddRangeAsync(courses);
-            //await db.SaveChangesAsync();
-
-            //await AddRolesAsync(roleNames);
-            //AspNetRoleClaims
-            //AspNetUsers
 
             var modules = GetModules(courses);
             await db.AddRangeAsync(modules);
-            //await db.SaveChangesAsync();
-
-            //AspNetUserClaims
-            //AspNetUserLogins
-            //AspNetUserRoles
-            //AspNetUserTokens
 
             var activities = GetActivity(activityTypes, modules);
             await db.AddRangeAsync(activities);
-            //await db.SaveChangesAsync();
 
             await AddRolesAsync(roleNames);
 

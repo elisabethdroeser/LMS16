@@ -16,7 +16,6 @@
 
         public Module()
         {
-         
         }
 
         public Module(string name, string description, DateTime startdate, DateTime enddate)

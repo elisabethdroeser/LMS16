@@ -1,32 +1,34 @@
-﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LMS16.Core.Entities;
 using LMS16.Data.Data;
 using Microsoft.AspNetCore.Identity;
-
+using AutoMapper;
+using LMS16.Core.ViewModels.CourseViewModels;
+#nullable disable
 namespace LMS16.Controllers
 {
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext db;
         private readonly UserManager<User> userManager;
+        private readonly IMapper mapper;
 
-        public CoursesController(ApplicationDbContext context, UserManager<User> userManager)
+        public CoursesController(ApplicationDbContext context, UserManager<User> userManager, IMapper mapper)
         {
             db = context;
             this.userManager = userManager;
+            this.mapper = mapper;
         }
 
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            return View(await db.Course.ToListAsync());
+            var viewModel = mapper.ProjectTo<CourseIndexViewModel>(db.Course)
+                .OrderByDescending(c => c.Id)
+                .Take(15);
+
+            return View(await viewModel.ToListAsync());
         }
 
         // GET: Courses/Details/5

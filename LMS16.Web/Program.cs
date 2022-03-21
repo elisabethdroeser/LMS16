@@ -26,6 +26,7 @@ builder.Services.AddDefaultIdentity<User>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();//lägga till filters här;
+builder.Services.AddAutoMapper(typeof(LmsMappings));
 
 var app = builder.Build();
 

@@ -17,9 +17,7 @@
 
         public Activity()
         {
-
         }
-
 
         public Activity (string name, string description, DateTime startDate, DateTime endDate)
         {
