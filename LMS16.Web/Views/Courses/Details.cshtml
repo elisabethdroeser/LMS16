@@ -1,7 +1,7 @@
-﻿@model LMS16.Core.Entities.Course
+﻿@model LMS16.Core.ViewModels.CourseViewModels.CourseDetailsViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "View Details";
 }
 
 <h1>Details</h1>
@@ -10,24 +10,12 @@
     <h4>Course</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.Name)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.Description)</dd>
+        <dt class = "col-sm-2">@Html.DisplayNameFor(model => model.StartDate)</dt>
+        <dd class = "col-sm-10">@Html.DisplayFor(model => model.StartDate)</dd>
     </dl>
 </div>
 <div>

@@ -10,6 +10,8 @@ namespace LMS16.Data.Data
         public LmsMappings()
         {
             CreateMap<Course, CourseIndexViewModel>().ReverseMap();
+            CreateMap<Course, CourseEditViewModel>().ReverseMap();
+            CreateMap<Course, CourseDetailsViewModel>().ReverseMap();
 
             CreateMap<User, UserIndexViewModel>().ReverseMap();
 

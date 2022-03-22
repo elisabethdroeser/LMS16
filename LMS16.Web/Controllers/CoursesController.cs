@@ -39,14 +39,26 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var course = await db.Course
-                .FirstOrDefaultAsync(m => m.Id == id);
+           // var course = await db.Course
+             //   .FirstOrDefaultAsync(c => c.Id == id);
+
+            var course = await mapper.ProjectTo<CourseDetailsViewModel>(db.Course)
+                                    .FirstOrDefaultAsync(c => c.Id == id);
+
+            var viewModel = new CourseDetailsViewModel
+            {
+                Id = course.Id,
+                Name = course.Name,
+                Description = course.Description,
+                StartDate = course.StartDate
+            };
+
             if (course == null)
             {
                 return NotFound();
             }
 
-            return View(course);
+            return View(viewModel);
         }
 
         // GET: Courses/Create
@@ -79,12 +91,23 @@ namespace LMS16.Controllers
                 return NotFound();
             }
 
-            var course = await db.Course.FindAsync(id);
+            var course = await db.Course.FirstOrDefaultAsync(c => c.Id == id);
+
+
+            var viewModel = new CourseEditViewModel
+            {
+                Id = course.Id,
+                Name = course.Name,
+                Description = course.Description,
+                StartDate = course.StartDate
+            };
+         
             if (course == null)
             {
                 return NotFound();
             }
-            return View(course);
+
+            return View(viewModel);
         }
 
         // POST: Courses/Edit/5
@@ -92,9 +115,9 @@ namespace LMS16.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,StartDate")] Course course)
+        public async Task<IActionResult> Edit(int id, CourseEditViewModel viewModel)
         {
-            if (id != course.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
@@ -103,12 +126,17 @@ namespace LMS16.Controllers
             {
                 try
                 {
+                    var course = await db.Course.FirstOrDefaultAsync(c => c.Id == id);
+                    
+                    mapper.Map(viewModel, course);
+
                     db.Update(course);
+
                     await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CourseExists(course.Id))
+                    if (!CourseExists(viewModel.Id))
                     {
                         return NotFound();
                     }
@@ -119,7 +147,7 @@ namespace LMS16.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(course);
+            return View(viewModel);
         }
 
         // GET: Courses/Delete/5
