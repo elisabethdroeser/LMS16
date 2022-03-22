@@ -6,7 +6,7 @@ namespace LMS16.Core.Entities
 {
     public class User : IdentityUser
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
 
         [MaxLength(30)]
         public string FirstName { get; set; }

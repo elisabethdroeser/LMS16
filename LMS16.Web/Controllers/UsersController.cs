@@ -8,27 +8,38 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LMS16.Core.Entities;
 using LMS16.Data.Data;
+using AutoMapper;
+using LMS16.Core.ViewModels.UserViewModels;
 
 namespace LMS16.Controllers
 {
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext db;
+        private readonly IMapper mapper;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(ApplicationDbContext context, IMapper mapper)
         {
             db = context;
+            this.mapper = mapper;
         }
-
+        
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = db.Users.Include(u => u.Course);
-            return View(await applicationDbContext.ToListAsync());
+            //var user = db.Users.Include(u => u.Course);
+
+            var viewModel = mapper.ProjectTo<UserIndexViewModel>(db.Users)
+                                    .OrderByDescending(u => u.Id);
+                                    //.Take(15);
+
+            return View(await viewModel.ToListAsync());
+
+            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
+        /*public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -156,6 +167,6 @@ namespace LMS16.Controllers
         private bool UserExists(int id)
         {
             return db.Users.Any(e => e.Id == id);
-        }
+        }*/
     }
 }

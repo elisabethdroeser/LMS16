@@ -17,10 +17,11 @@ namespace LMS16.Data.Data
         public DbSet<LMS16.Core.Entities.ActivityType> ActivityType { get; set; }
         public DbSet<LMS16.Core.Entities.Course> Course { get; set; }
         public DbSet<LMS16.Core.Entities.Module> Module { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
         }
     }
 }
