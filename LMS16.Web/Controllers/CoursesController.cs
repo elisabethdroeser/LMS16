@@ -25,8 +25,8 @@ namespace LMS16.Controllers
         public async Task<IActionResult> Index()
         {
             var viewModel = mapper.ProjectTo<CourseIndexViewModel>(db.Course)
-                .OrderByDescending(c => c.Id)
-                .Take(15);
+                                    .OrderByDescending(c => c.Id)
+                                    .Take(15);
 
             return View(await viewModel.ToListAsync());
         }
@@ -35,25 +35,43 @@ namespace LMS16.Controllers
         {
             if (id == null) return BadRequest();
 
-            var userId = userManager.GetUserId(User);
+            var course = await mapper.ProjectTo<CourseIndexViewModel>(db.Course)
+                          .FirstOrDefaultAsync(c => c.Id == id);
 
-            var 
-
+            var viewModel = new CourseIndexViewModel
+            {
+                Id = course.Id,
+                Name = course.Name,
+                Description = course.Description,
+                //Modules = course.Modules,
+                //AttendingStudents = course.AttendingStudents
+            };
+            return View(viewModel); 
         }
 
         public async Task<IActionResult> IndexStudent(int? id)
         {
             if (id == null) return BadRequest();
 
-            var userId = userManager.GetUserId(User);
+            var student = await mapper.ProjectTo<StudentIndexViewModel>(db.Course)
+                       .FirstOrDefaultAsync(s => s.Id == id);
 
-            var
-
+            var viewModel = new CourseIndexViewModel
+            {
+                Id = student.Id,
+                Name = student.Name,
+          
+                //Modules = course.Modules,
+       
+            };
+            return View(viewModel);
         }
 
+    }
 
-        // GET: Courses/Details/5
-        public async Task<IActionResult> Details(int? id)
+
+    // GET: Courses/Details/5
+    public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -113,7 +131,6 @@ namespace LMS16.Controllers
             }
 
             var course = await db.Course.FirstOrDefaultAsync(c => c.Id == id);
-
 
             var viewModel = new CourseEditViewModel
             {

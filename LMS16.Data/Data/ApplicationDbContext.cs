@@ -23,6 +23,15 @@ namespace LMS16.Data.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            builder
+            public async Task<IEnumerable<Course>> GetCourseAsync()
+            {
+                return db.Courses.Include(c => c.Modules)
+                                 .Include(c => c.AttendingStudents)
+                                 .OrderBy(c => c.StartTime);
+
+            }
+
         }
     }
 }
