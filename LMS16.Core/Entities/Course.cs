@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS16.Core.Entities
 #nullable disable
@@ -7,7 +8,10 @@ namespace LMS16.Core.Entities
     {
         public int Id { get; set; }
 
-        [MaxLength(30)]
+        [MaxLength(200)]
+        [Required]
+        [Display(Name = "A short description of the course")]
+        [CourseName(6)]
         public string Name { get; set; }
 
         [MaxLength(200)]
@@ -25,6 +29,10 @@ namespace LMS16.Core.Entities
             Name = name;
             Description = description;
             StartDate = startdate;  
+        }
+
+        private class CourseNameAttribute : Attribute
+        {
         }
     }
 }

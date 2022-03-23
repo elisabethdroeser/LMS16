@@ -26,4 +26,19 @@
     <ProjectReference Include="..\LMS16.Data\LMS16.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Resources\Validationmessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Validationmessages.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Validationmessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Validationmessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
