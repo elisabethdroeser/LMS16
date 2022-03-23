@@ -31,6 +31,27 @@ namespace LMS16.Controllers
             return View(await viewModel.ToListAsync());
         }
 
+        public async Task<IActionResult> IndexTeacher(int? id)
+        {
+            if (id == null) return BadRequest();
+
+            var userId = userManager.GetUserId(User);
+
+            var 
+
+        }
+
+        public async Task<IActionResult> IndexStudent(int? id)
+        {
+            if (id == null) return BadRequest();
+
+            var userId = userManager.GetUserId(User);
+
+            var
+
+        }
+
+
         // GET: Courses/Details/5
         public async Task<IActionResult> Details(int? id)
         {

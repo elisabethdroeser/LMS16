@@ -17,5 +17,7 @@ namespace LMS16.Core.Entities
 
         public Course Course { get; set; }
         public int CourseId { get; set; }
+
+        public ICollection<User> AttendingStudents { get; set; } = new List<User>();
     }
 }

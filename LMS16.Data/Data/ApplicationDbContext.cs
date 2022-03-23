@@ -11,6 +11,7 @@ namespace LMS16.Data.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
 
         public DbSet<LMS16.Core.Entities.Activity> Activity { get; set; }

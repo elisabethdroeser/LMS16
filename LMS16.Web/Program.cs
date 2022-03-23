@@ -40,7 +40,7 @@ using (var scope = app.Services.CreateScope())
 
 
     var teacherPW = config["TeacherPW"];
-    //var studentPW = config["studentPW"];
+    var studentPW = config["studentPW"];
 
     try
     {
