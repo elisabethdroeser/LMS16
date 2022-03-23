@@ -11,7 +11,6 @@ namespace LMS16.Core.Entities
         [MaxLength(200)]
         [Required]
         [Display(Name = "A short description of the course")]
-        [CourseName(6)]
         public string Name { get; set; }
 
         [MaxLength(200)]
