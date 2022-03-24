@@ -8,10 +8,8 @@ namespace LMS16.Data.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
         }
 
         public DbSet<LMS16.Core.Entities.Activity> Activity { get; set; }
@@ -22,16 +20,6 @@ namespace LMS16.Data.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            builder
-            public async Task<IEnumerable<Course>> GetCourseAsync()
-            {
-                return db.Courses.Include(c => c.Modules)
-                                 .Include(c => c.AttendingStudents)
-                                 .OrderBy(c => c.StartTime);
-
-            }
-
         }
     }
 }

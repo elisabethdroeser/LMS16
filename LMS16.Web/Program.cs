@@ -36,11 +36,8 @@ using (var scope = app.Services.CreateScope())
     var db = services.GetRequiredService<ApplicationDbContext>();
     var config = services.GetRequiredService<IConfiguration>();
 
-    //dotnet user-UserSecretsConfigurationExtensions set "AdminPW" "Lösenord!";
-
-
     var teacherPW = config["TeacherPW"];
-    var studentPW = config["studentPW"];
+    //var studentPW = config["StudentPW"];
 
     try
     {

@@ -18,16 +18,15 @@ namespace LMS16.Data.Data
         private static ApplicationDbContext db = default!;
         private static RoleManager<IdentityRole> roleManager = default!;
         private static UserManager<User> userManager = default!;
-        private static IEnumerable<Course> courses;
-        private static readonly string studentPW;
+        private static IEnumerable<Course> courses = default!;
+        
 
         public static async Task InitAsync(ApplicationDbContext context, IServiceProvider services, string teacherPW)
         {
             faker = new Faker();
 
             if (string.IsNullOrWhiteSpace(teacherPW)) throw new Exception("Can´t get password from config");
-            if (string.IsNullOrWhiteSpace(studentPW)) throw new Exception("Can´t get password from config");
-
+        
             if (context is null) throw new Exception(nameof(ApplicationDbContext));
             
             db = context;
@@ -42,12 +41,11 @@ namespace LMS16.Data.Data
     
             var roleNames = new[] { "Student", "Teacher" };
             var teacherEmail = "teacher@school.se";
-            var studentMail = "student1@school.se";
-
+            
             var activityTypes = GetActivityTypes();
             await db.AddRangeAsync(activityTypes);
      
-            courses = GetCourses();
+            var courses = GetCourses();
             await db.AddRangeAsync(courses);
 
             var modules = GetModules(courses);
@@ -59,10 +57,7 @@ namespace LMS16.Data.Data
             await AddRolesAsync(roleNames);
 
             var teacher = await AddTeacherAsync(teacherEmail, teacherPW);
-            await AddRolesAsync(teacher, roleNames);
-
-            var student = await AddStudentAsync(studentMail, studentPW);
-            await AddRolesAsync(student, roleNames);
+            await AddRolesAsync(teacher, roleNames);    
             
             await db.SaveChangesAsync();
         }
@@ -176,29 +171,8 @@ namespace LMS16.Data.Data
             if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
 
             return teacher;
-        }
-        
-        private static async Task<User> AddStudentAsync(string studentEmail, string studentPW)
-        {
-            var found = await userManager.FindByEmailAsync(studentEmail);
-
-            if (found != null) return null!;
-
-            var student = new User
-            {
-                UserName = studentEmail,
-                Email = studentEmail,
-                FirstName = "Student",
-
-            };
-
-            var result = await userManager.CreateAsync(student, studentPW);
-            if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
-
-            return student;
-        }
-        
-
+        }    
+ 
         private static async Task AddRolesAsync(string[] roleNames)
         {
             foreach (var roleName in roleNames)
