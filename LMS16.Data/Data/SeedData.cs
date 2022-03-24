@@ -18,7 +18,7 @@ namespace LMS16.Data.Data
         private static ApplicationDbContext db = default!;
         private static RoleManager<IdentityRole> roleManager = default!;
         private static UserManager<User> userManager = default!;
-        private static IEnumerable<Course> courses;
+        private static IEnumerable<Course> courses = default!;
 
         public static async Task InitAsync(ApplicationDbContext context, IServiceProvider services, string teacherPW)
         {
