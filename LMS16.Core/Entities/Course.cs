@@ -18,7 +18,6 @@ namespace LMS16.Core.Entities
         public DateTime StartDate { get; set; }
         public ICollection<User> Users { get; set; } = new List<User>();
         public ICollection<Module> Modules { get; set; } = new List<Module>();
-        //public ICollection<User> AttendingStudents { get; set; } = new List<User>();
 
         public Course()
         {

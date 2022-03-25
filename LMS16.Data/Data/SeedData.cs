@@ -19,16 +19,13 @@ namespace LMS16.Data.Data
         private static RoleManager<IdentityRole> roleManager = default!;
         private static UserManager<User> userManager = default!;
         private static IEnumerable<Course> courses = default!;
-        
 
-        private static IEnumerable<Course> courses = default!;
-
-        public static async Task InitAsync(ApplicationDbContext context, IServiceProvider services, string teacherPW)
+        public static async Task InitAsync(ApplicationDbContext context, IServiceProvider services, string teacherPW, string studentPW)
         {
             faker = new Faker();
 
             if (string.IsNullOrWhiteSpace(teacherPW)) throw new Exception("Can´t get password from config");
-            //if (string.IsNullOrWhiteSpace(studentPW)) throw new Exception("Can´t get password from config");
+            if (string.IsNullOrWhiteSpace(studentPW)) throw new Exception("Can´t get password from config");
 
             if (context is null) throw new Exception(nameof(ApplicationDbContext));
             
@@ -41,10 +38,16 @@ namespace LMS16.Data.Data
 
             userManager = services.GetRequiredService<UserManager<User>>();
             if (userManager == null) throw new NullReferenceException(nameof(UserManager<User>));
-    
-            var roleNames = new[] { "Student", "Teacher" };
+            
+            var roleNames = new[] { "Teacher", "Student" };
+            var roleNames1 = new[] { "Teacher" };
+            var roleNames2 = new[] { "Student" };
+
             var teacherEmail = "teacher@school.se";
-            //var studentMail = "student1@school.se";
+            var studentEmail = "student@school.se";
+            
+            //var roleNames = GetRoles();
+           
 
             var activityTypes = GetActivityTypes();
             await db.AddRangeAsync(activityTypes);
@@ -61,15 +64,22 @@ namespace LMS16.Data.Data
             await AddRolesAsync(roleNames);
 
             var teacher = await AddTeacherAsync(teacherEmail, teacherPW);
-            await AddRolesAsync(teacher, roleNames);
+            await AddRolesAsync(teacher, roleNames1);
 
-            /*var student = await AddStudentAsync(studentMail, studentPW);
-            await AddRolesAsync(student, roleNames);
-            */
+            var student = await AddStudentAsync(studentEmail, studentPW);
+            await AddRolesAsync(student, roleNames2);
+            
             await db.SaveChangesAsync();
         }
+        /*
+        private static async Task GetRoles()
+        {
+            if (await db.Roles.AnyAsync()) return;
 
-    
+            await roleManager.CreateAsync(new IdentityRole { Name = "Teacher" });
+            await roleManager.CreateAsync(new IdentityRole { Name = "Student" });
+        }*/
+
         private static async Task AddRolesAsync(User teacher, string[] roleNames)
         {
             if (teacher == null) throw new NullReferenceException(nameof (teacher));
@@ -179,7 +189,8 @@ namespace LMS16.Data.Data
 
             return teacher;
         }
-        /*
+
+   
         private static async Task<User> AddStudentAsync(string studentEmail, string studentPW)
         {
             var found = await userManager.FindByEmailAsync(studentEmail);
@@ -190,8 +201,8 @@ namespace LMS16.Data.Data
             {
                 UserName = studentEmail,
                 Email = studentEmail,
-                FirstName = "Teacher",
-
+                FirstName = "Student",
+                Course = courses.First()
             };
 
             var result = await userManager.CreateAsync(student, studentPW);
@@ -199,7 +210,7 @@ namespace LMS16.Data.Data
 
             return student;
         }
-        */
+        
 
         private static async Task AddRolesAsync(string[] roleNames)
         {

@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
 using LMS16.Core.Entities;
-using LMS16.Data.Data;
-using Microsoft.AspNetCore.Identity;
-using AutoMapper;
 using LMS16.Core.ViewModels.CourseViewModels;
+using LMS16.Core.ViewModels.StudentViewModels;
+using LMS16.Core.ViewModels.UserViewModels;
+using LMS16.Data.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 #nullable disable
 namespace LMS16.Controllers
 {
@@ -24,13 +27,102 @@ namespace LMS16.Controllers
         // GET: Courses
         public async Task<IActionResult> Index()
         {
+            
+
+            if (User.IsInRole("Teacher"))
+            {
+                return RedirectToAction(nameof(IndexTeacher));
+            }
+            else if (User.IsInRole("Student"))
+            {
+                return RedirectToAction(nameof(IndexStudent));
+            }
+
+         
             var viewModel = mapper.ProjectTo<CourseIndexViewModel>(db.Course)
-                .OrderByDescending(c => c.Id)
-                .Take(15);
+                                    .OrderByDescending(c => c.Id)
+                                    .Take(5);
 
             return View(await viewModel.ToListAsync());
+            
         }
 
+/*
+        public async Task<IActionResult> IndexAttending(int? id)
+        {
+            if (id == null) return BadRequest();
+
+            var userId = userManager.GetUserId(User);
+            /*
+            var course = db.Course.Include(s => s.AttendingStudents)
+                                    .FirstOrDefault(a => a.Id == id);
+
+            var attending = course?.AttendingStudents
+                                    .FirstOrDefault(a => a.Id == userId);
+            
+            var attending = db.Course.FindAsync(userId, id);
+
+            if (attending == null)
+            {
+                var booking = new Course
+                {
+                    Id = (int)userId
+
+                };
+                db.Course.Add(booking);
+             }
+            else
+            {
+                db.Remove(attending);
+            }
+            await db.SaveChangesAsync(); 
+
+            return RedirectToAction(Index)
+        }
+        */
+        /*
+
+        /return View(await viewModel.ToListAsync());
+        return View(await db.Course.ToListAsync());
+        //new { id = userManager.Get...(User)}
+        */
+
+
+
+    
+        public async Task<IActionResult> IndexTeacher()
+        {
+
+            var viewModel = mapper.ProjectTo<CourseIndexViewModel>(db.Course);
+
+
+            //mapper.ProjectTo<CourseIndexViewModel>(db.Course);
+
+            /*
+            var viewModel = new CourseIndexViewModel
+            {
+                Id = course.Id,
+                Name = course.Name,
+                Description = course.Description
+                //Modules = course.Modules,
+                //AttendingStudents = course.AttendingStudents
+            };
+                */
+            return View(viewModel);
+        }
+
+
+        public async Task<IActionResult> IndexStudent()
+        {
+           
+            var viewModel = mapper.ProjectTo<StudentCourseViewModel>(db.Course)
+                                    .ToList();
+            return View(nameof(IndexStudent), viewModel);
+
+            // slå upp userID
+            // hitta bilken kurs användaren har
+
+        }
         // GET: Courses/Details/5
         public async Task<IActionResult> Details(int? id)
         {

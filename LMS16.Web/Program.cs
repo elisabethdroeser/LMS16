@@ -37,11 +37,11 @@ using (var scope = app.Services.CreateScope())
     var config = services.GetRequiredService<IConfiguration>();
 
     var teacherPW = config["TeacherPW"];
-    //var studentPW = config["StudentPW"];
+    var studentPW = config["StudentPW"];
 
     try
     {
-        SeedData.InitAsync(db, services, teacherPW).GetAwaiter().GetResult();
+        SeedData.InitAsync(db, services, teacherPW, studentPW).GetAwaiter().GetResult();
     }
     catch (Exception ex)
     {

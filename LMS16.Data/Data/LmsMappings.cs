@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LMS16.Core.Entities;
 using LMS16.Core.ViewModels.CourseViewModels;
+using LMS16.Core.ViewModels.StudentViewModels;
 using LMS16.Core.ViewModels.UserViewModels;
 
 namespace LMS16.Data.Data
@@ -13,7 +14,10 @@ namespace LMS16.Data.Data
             CreateMap<Course, CourseEditViewModel>().ReverseMap();
             CreateMap<Course, CourseDetailsViewModel>().ReverseMap();
 
+            CreateMap<Course, StudentCourseViewModel>().ReverseMap();
+
             CreateMap<User, UserIndexViewModel>().ReverseMap();
+            
 
         }
     }

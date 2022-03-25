@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LMS16.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
