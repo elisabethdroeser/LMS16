@@ -28,6 +28,8 @@ builder.Services.AddDefaultIdentity<User>(options =>
 builder.Services.AddControllersWithViews();//lägga till filters här;
 builder.Services.AddAutoMapper(typeof(LmsMappings));
 
+// Registrera ChooseCourseService
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

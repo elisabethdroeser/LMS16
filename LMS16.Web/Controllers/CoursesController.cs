@@ -79,8 +79,7 @@ namespace LMS16.Controllers
 
             return RedirectToAction(Index)
         }
-        */
-        /*
+  
 
         /return View(await viewModel.ToListAsync());
         return View(await db.Course.ToListAsync());
@@ -89,7 +88,7 @@ namespace LMS16.Controllers
 
 
 
-    
+        [Authorize(Roles ="Teacher")]
         public async Task<IActionResult> IndexTeacher()
         {
 
@@ -105,23 +104,58 @@ namespace LMS16.Controllers
                 Name = course.Name,
                 Description = course.Description
                 //Modules = course.Modules,
+
                 //AttendingStudents = course.AttendingStudents
             };
                 */
             return View(viewModel);
         }
-
-
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> IndexStudent()
         {
-           
-            var viewModel = mapper.ProjectTo<StudentCourseViewModel>(db.Course)
-                                    .ToList();
-            return View(nameof(IndexStudent), viewModel);
+            //User user = await userManager.GetUserAsync(User);
+            var userId = userManager.GetUserId(User);
+            /*var model = await db.Users.Select(c => new StudentCourseViewModel
+            {
+                Course = c.Course,
+            });*/
+
+            //var viewMmodel = await db.Users
+            //                .Select(c => new StudentCourseViewModel
+            //{
+            //    Course = c.Course,
+            //    Activities = new List<Activity>(),
+            //    Modules = new List<Module>()
+
+            //})
+            //    .Where(c => c.CourseId == Course);
+
+            var user = db.Users.Find(userId);
+
+            var course = await db.Course
+                .Include(c => c.AttendingStudents)
+                .Include(c => c.Modules)
+                .ThenInclude(m => m.Activities)
+                .ThenInclude(a => a.ActivityType)
+                .FirstOrDefaultAsync(c => c.Id == user.CourseId);
+
+            var viewModel = new StudentCourseViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Course = course,              
+                Modules = course.Modules,
+                Attendees = course.AttendingStudents
+            };
+
+
+            //var name = viewModel.Modules.First().Activities.ToList()[0].ActivityType.Name;
+
 
             // slå upp userID
-            // hitta bilken kurs användaren har
-
+            // hitta vilken kurs användaren har
+            //return View(nameof(IndexStudent), viewModel);
+            return View(viewModel);
         }
         // GET: Courses/Details/5
         public async Task<IActionResult> Details(int? id)

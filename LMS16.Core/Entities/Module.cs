@@ -18,12 +18,12 @@
         {
         }
 
-        public Module(string name, string description, DateTime startdate, DateTime enddate)
+        public Module(string name, string description, DateTime startDate, DateTime endDate)
         {
             Name = name;
             Description = description;
-            StartDate = startdate;
-            EndDate = enddate;
+            StartDate = startDate;
+            EndDate = endDate;
         }
     }
 }

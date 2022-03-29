@@ -54,7 +54,7 @@ namespace LMS16.Data.Migrations
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("Activity");
+                    b.ToTable("Activity", (string)null);
                 });
 
             modelBuilder.Entity("LMS16.Core.Entities.ActivityType", b =>
@@ -70,7 +70,7 @@ namespace LMS16.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ActivityType");
+                    b.ToTable("ActivityType", (string)null);
                 });
 
             modelBuilder.Entity("LMS16.Core.Entities.Course", b =>
@@ -95,7 +95,7 @@ namespace LMS16.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Course");
+                    b.ToTable("Course", (string)null);
                 });
 
             modelBuilder.Entity("LMS16.Core.Entities.Module", b =>
@@ -125,7 +125,7 @@ namespace LMS16.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Module");
+                    b.ToTable("Module", (string)null);
                 });
 
             modelBuilder.Entity("LMS16.Core.Entities.User", b =>

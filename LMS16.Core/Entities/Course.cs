@@ -16,7 +16,7 @@ namespace LMS16.Core.Entities
         [MaxLength(200)]
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
-        public ICollection<User> Users { get; set; } = new List<User>();
+        public ICollection<User> AttendingStudents { get; set; } = new List<User>();
         public ICollection<Module> Modules { get; set; } = new List<Module>();
 
         public Course()

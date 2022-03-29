@@ -15,11 +15,13 @@ namespace LMS16.Core.ViewModels.StudentViewModels
 
         [MaxLength(30)]
         public string LastName { get; set; }
-        public string FullName => $"{FirstName} {LastName}";
 
         public Course Course { get; set; }
-        public int CourseId { get; set; }
+        //public int CourseId { get; set; }
 
-
+        //public IEnumerable<Activity> Activities { get; set; }
+        //public IEnumerable<ActivityType> ActivityTypes { get; set; }
+        public IEnumerable<Module> Modules { get; set; } 
+        public IEnumerable<User> Attendees { get; set; }
     }
 }
