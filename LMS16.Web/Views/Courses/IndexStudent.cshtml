@@ -1,36 +1,28 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model IEnumerable<StudentCourseViewModel>
+@model LMS16.Core.ViewModels.StudentViewModels.StudentCourseViewModel
 @{
     ViewData["Title"] = "Student overview";
 }
 
 <h1>Student overview</h1>
-<p>View Modules and activities linked to courses</p>
+<p>View Modules and activities linked to courses</>
 
 <table class="table">
     <thead>
-         <tr>
+        <tr>
             <th>@Html.DisplayNameFor(model => model.FirstName)</th>
             <th>@Html.DisplayNameFor(model => model.LastName)</th>
             <th>@Html.DisplayNameFor(model => model.Course)</th>
- 
             <th></th>
         </tr>
     </thead>
     <tbody>
-         @foreach (var item in Model) { 
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
-            <td>@Html.DisplayFor(modelItem => item.LastName)</td>
-            <td>@Html.DisplayFor(modelItem => item.Course)</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item">Edit</a> <span> | </span>
-                <a asp-action="Details" asp-route-id="@item">Details</a> <span> | </span>
-                <a asp-action="Delete" asp-route-id="@item">Delete</a>  <span> | </span>
-            </td>
-        </tr>
-    }
+     <tr>
+            <td>@Html.DisplayFor(model => model.FirstName)</td>
+            <td>@Html.DisplayFor(model => model.LastName)</td>
+            <td>@Html.DisplayFor(model => model.Course.Name)</td>
+            <td></tr>
     </tbody>
 </table>

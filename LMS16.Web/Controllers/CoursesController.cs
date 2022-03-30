@@ -113,23 +113,8 @@ namespace LMS16.Controllers
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> IndexStudent()
         {
-            //User user = await userManager.GetUserAsync(User);
             var userId = userManager.GetUserId(User);
-            /*var model = await db.Users.Select(c => new StudentCourseViewModel
-            {
-                Course = c.Course,
-            });*/
-
-            //var viewMmodel = await db.Users
-            //                .Select(c => new StudentCourseViewModel
-            //{
-            //    Course = c.Course,
-            //    Activities = new List<Activity>(),
-            //    Modules = new List<Module>()
-
-            //})
-            //    .Where(c => c.CourseId == Course);
-
+     
             var user = db.Users.Find(userId);
 
             var course = await db.Course
@@ -148,12 +133,8 @@ namespace LMS16.Controllers
                 Attendees = course.AttendingStudents
             };
 
-
             //var name = viewModel.Modules.First().Activities.ToList()[0].ActivityType.Name;
 
-
-            // slå upp userID
-            // hitta vilken kurs användaren har
             //return View(nameof(IndexStudent), viewModel);
             return View(viewModel);
         }

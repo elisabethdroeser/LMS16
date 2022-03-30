@@ -1,7 +1,10 @@
 using LMS16.Core.Entities;
 using LMS16.Data;
 using LMS16.Data.Data;
+using LMS16.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,9 +29,19 @@ builder.Services.AddDefaultIdentity<User>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();//lägga till filters här;
+/*builder.Services.AddControllersWithViews(opt =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .RequireRole("Student")
+                        .Build();
+
+    opt.Filters.Add(new AuthorizeFilter(policy));
+});*/
+
 builder.Services.AddAutoMapper(typeof(LmsMappings));
 
-// Registrera ChooseCourseService
+builder.Services.AddScoped<ICourseSelectListService, CourseSelectListService>();
 
 var app = builder.Build();
 

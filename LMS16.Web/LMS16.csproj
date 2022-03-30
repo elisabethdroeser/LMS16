@@ -30,8 +30,4 @@
     <ProjectReference Include="..\LMS16.Data\LMS16.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

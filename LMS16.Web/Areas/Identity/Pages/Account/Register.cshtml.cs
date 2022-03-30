@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LMS16.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
@@ -74,6 +75,7 @@ namespace LMS16.Areas.Identity.Pages.Account
             public string FirstName { get; set; }
             public string LastName{ get; set; }
             public int CourseId { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -119,8 +121,8 @@ namespace LMS16.Areas.Identity.Pages.Account
                 var user = CreateUser();
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                //user.CourseId = Input.CourseId;
-                user.CourseId = 1;
+                user.CourseId = Input.CourseId;
+                //user.CourseId = 1;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
