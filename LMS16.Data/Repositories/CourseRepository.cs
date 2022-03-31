@@ -1,6 +1,9 @@
 ﻿using LMS16.Core.Entities;
+using LMS16.Core.Repositories;
+using LMS16.Core.ViewModels.CourseViewModels;
 using LMS16.Data.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LMS16.Data.Repositories
 {
-    public class CourseRepository
+    public class CourseRepository : ICourseRepository
     {
         private readonly ApplicationDbContext db;
         public CourseRepository(ApplicationDbContext db)
@@ -18,9 +21,9 @@ namespace LMS16.Data.Repositories
                 
         }
 
-        public Task<IEnumerable<Course>> GetAsync()
+        public async Task<IEnumerable<Course>> GetCoursesAsync()
         {
-            throw new NotImplementedException();
+            return await db.Course.ToListAsync();
         }
     }
 }

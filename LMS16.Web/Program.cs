@@ -1,6 +1,8 @@
 using LMS16.Core.Entities;
+using LMS16.Core.Repositories;
 using LMS16.Data;
 using LMS16.Data.Data;
+using LMS16.Data.Repositories;
 using LMS16.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -38,6 +40,7 @@ builder.Services.AddControllersWithViews();//lägga till filters här;
 
     opt.Filters.Add(new AuthorizeFilter(policy));
 });*/
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAutoMapper(typeof(LmsMappings));
 

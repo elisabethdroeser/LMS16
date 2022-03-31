@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LMS16.Core.Entities;
+using LMS16.Core.Repositories;
 using LMS16.Core.ViewModels.CourseViewModels;
 using LMS16.Core.ViewModels.StudentViewModels;
 using LMS16.Core.ViewModels.UserViewModels;
@@ -17,20 +18,20 @@ namespace LMS16.Controllers
         private readonly ApplicationDbContext db;
         private readonly UserManager<User> userManager;
         private readonly IMapper mapper;
-        private readonly CourseRepository courseRepo;
+        private readonly IUnitOfWork unitOfWork;
 
-        public CoursesController(ApplicationDbContext context, UserManager<User> userManager, IMapper mapper)
+        public CoursesController(ApplicationDbContext context, UserManager<User> userManager, IMapper mapper, IUnitOfWork unitOfWork)
         {
             db = context;
             this.userManager = userManager;
             this.mapper = mapper;
-            courseRepo = new CourseRepository(db);
+            this.unitOfWork = unitOfWork;
         }
 
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-
+ 
             if (User.IsInRole("Teacher"))
             {
                 return RedirectToAction(nameof(IndexTeacher));
@@ -93,23 +94,26 @@ namespace LMS16.Controllers
         [Authorize(Roles ="Teacher")]
         public async Task<IActionResult> IndexTeacher()
         {
-            return await courseRepo.GetAsync();
-            //var viewModel = mapper.ProjectTo<CourseIndexViewModel>(db.Course);
-
-
-            //mapper.ProjectTo<CourseIndexViewModel>(db.Course);
+            var viewModel = await unitOfWork.CourseRepository.GetCoursesAsync();
+//            var viewModel = mapper.ProjectTo<CourseIndexViewModel>(db.Course);
+             //await unitOfWork.CourseRepository.GetCoursesAsync();
+          
 
             /*
-            var viewModel = new CourseIndexViewModel
-            {
-                Id = course.Id,
-                Name = course.Name,
-                Description = course.Description
-                //Modules = course.Modules,
+       //mapper.ProjectTo<CourseIndexViewModel>(db.Course);
+            */
+/*
+       var viewModel = new CourseIndexViewModel
+       {
+           Id = course.Id,
+           Name = course.Name,
+           Description = course.Description
+           //Modules = course.Modules,
 
-                //AttendingStudents = course.AttendingStudents
-            };
-                */
+           //AttendingStudents = course.AttendingStudents
+       };
+           */
+
             return View(viewModel);
         }
         [Authorize(Roles = "Student")]
