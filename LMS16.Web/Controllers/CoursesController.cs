@@ -4,6 +4,7 @@ using LMS16.Core.ViewModels.CourseViewModels;
 using LMS16.Core.ViewModels.StudentViewModels;
 using LMS16.Core.ViewModels.UserViewModels;
 using LMS16.Data.Data;
+using LMS16.Data.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,18 +17,19 @@ namespace LMS16.Controllers
         private readonly ApplicationDbContext db;
         private readonly UserManager<User> userManager;
         private readonly IMapper mapper;
+        private readonly CourseRepository courseRepo;
 
         public CoursesController(ApplicationDbContext context, UserManager<User> userManager, IMapper mapper)
         {
             db = context;
             this.userManager = userManager;
             this.mapper = mapper;
+            courseRepo = new CourseRepository(db);
         }
 
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            
 
             if (User.IsInRole("Teacher"))
             {
@@ -91,8 +93,8 @@ namespace LMS16.Controllers
         [Authorize(Roles ="Teacher")]
         public async Task<IActionResult> IndexTeacher()
         {
-
-            var viewModel = mapper.ProjectTo<CourseIndexViewModel>(db.Course);
+            return await courseRepo.GetAsync();
+            //var viewModel = mapper.ProjectTo<CourseIndexViewModel>(db.Course);
 
 
             //mapper.ProjectTo<CourseIndexViewModel>(db.Course);
