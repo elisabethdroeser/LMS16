@@ -6,6 +6,8 @@ using LMS16.Core.ViewModels.StudentViewModels;
 using LMS16.Core.ViewModels.UserViewModels;
 using LMS16.Data.Data;
 using LMS16.Data.Repositories;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -94,27 +96,31 @@ namespace LMS16.Controllers
         [Authorize(Roles ="Teacher")]
         public async Task<IActionResult> IndexTeacher()
         {
-            var viewModel = await unitOfWork.CourseRepository.GetCoursesAsync();
-//            var viewModel = mapper.ProjectTo<CourseIndexViewModel>(db.Course);
-             //await unitOfWork.CourseRepository.GetCoursesAsync();
-          
+            var courses = await unitOfWork.CourseRepository.GetCoursesAsync();
+            //return Ok(mapper.Map<IEnumerable<CourseIndexViewModel>>(courses));
+        
+            return View(mapper.Map<IEnumerable<CourseIndexViewModel>>(courses));
+
+            //var viewModel = mapper.ProjectTo<CourseIndexViewModel>(db.Course);
+            //await unitOfWork.CourseRepository.GetCoursesAsync();
+
 
             /*
        //mapper.ProjectTo<CourseIndexViewModel>(db.Course);
             */
-/*
-       var viewModel = new CourseIndexViewModel
-       {
-           Id = course.Id,
-           Name = course.Name,
-           Description = course.Description
-           //Modules = course.Modules,
+            /*
+                   var viewModel = new CourseIndexViewModel
+                   {
+                       Id = course.Id,
+                       Name = course.Name,
+                       Description = course.Description
+                       //Modules = course.Modules,
 
-           //AttendingStudents = course.AttendingStudents
-       };
-           */
+                       //AttendingStudents = course.AttendingStudents
+                   };
+                       */
 
-            return View(viewModel);
+            //return View(viewModel);
         }
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> IndexStudent()

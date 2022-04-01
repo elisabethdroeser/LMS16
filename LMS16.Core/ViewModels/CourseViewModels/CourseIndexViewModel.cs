@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LMS16.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace LMS16.Core.ViewModels.CourseViewModels
         [MaxLength(200)]
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
+        public ICollection<User> AttendingStudents { get; set; }
     }
 }

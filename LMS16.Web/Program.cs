@@ -31,15 +31,7 @@ builder.Services.AddDefaultIdentity<User>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();//lägga till filters här;
-/*builder.Services.AddControllersWithViews(opt =>
-{
-    var policy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .RequireRole("Student")
-                        .Build();
 
-    opt.Filters.Add(new AuthorizeFilter(policy));
-});*/
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAutoMapper(typeof(LmsMappings));
